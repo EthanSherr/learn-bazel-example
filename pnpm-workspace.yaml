@@ -1,2 +1,3 @@
 packages:
   - 'projects/node-js-project'
+  - 'projects/my-ts-project'

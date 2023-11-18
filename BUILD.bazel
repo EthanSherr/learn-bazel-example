@@ -1,3 +1,24 @@
+load("@aspect_rules_swc//swc:defs.bzl", "swc")
 load("@npm//:defs.bzl", "npm_link_all_packages")
 
+# TS
+load("@aspect_bazel_lib//lib:copy_to_bin.bzl", "copy_to_bin")
+load("@aspect_rules_ts//ts:defs.bzl", "ts_config")
+
 npm_link_all_packages()
+
+# ...nahh let's do it individually
+# package(default_visibility = ["//projects:__subpackages__"])
+
+# TS
+ts_config(
+    name = "tsconfig",
+    src = "tsconfig-base.json",
+    visibility = [":__subpackages__"],
+)
+
+# # what's it about?
+copy_to_bin(
+    name = "tsconfig-base",
+    srcs = ["tsconfig-base.json"],
+)
