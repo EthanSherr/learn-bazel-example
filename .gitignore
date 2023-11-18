@@ -2,3 +2,4 @@ bazel-bin
 bazel-multi-language-repo
 bazel-out
 bazel-testlogs
+node_modules
