@@ -1,0 +1,12 @@
+{
+  "name": "node-js-project",
+  "version": "1.0.0",
+  "description": "",
+  "type": "commonjs",
+  "dependencies": {
+    "is-odd": "3.0.1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

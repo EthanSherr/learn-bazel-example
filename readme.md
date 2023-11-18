@@ -47,3 +47,7 @@ at the root.  This was an insanely useful read:
 [stack overflow answer overview by Toxaris](https://stackoverflow.com/questions/75445658/how-to-setup-a-bazel-workspace-with-rules-js-for-a-monorepo-with-multiple-pack)
 x [docs](https://docs-legacy.aspect.build/aspect-build/rules_js/v1.0.0-rc.1/docs/npm_import-docgen.html)
 [rules_nodejs readme.md](https://docs.aspect.build/rulesets/rules_nodejs)
+
+I'm trying to figure out how to use "type": "module" ESM syntax in node-js-project/index.js
+But do I really care?  I mean I'll be using typescript anyway.
+
