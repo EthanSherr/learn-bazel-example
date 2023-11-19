@@ -140,4 +140,28 @@ more info
 [aspect-rules-ts](https://docs.aspect.build/rulesets/aspect_rules_ts/docs/rules)
 
 
-Finally, I just learned I could use a ts_project as a dependency for a js_binary rule, and run it after compilation.  FUCK YES.
+Finally, I just learned I could use a ts_project as a dependency for a js_binary rule, and run it after compilation.  FUCK YES. 
+
+[an exmaple of liba, libb underneath a ts root](https://github.com/aspect-build/rules_ts/blob/main/examples/project_references/lib_a/BUILD.bazel)
+
+[an example of craco integration](https://github.com/bazelbuild/examples/blob/main/frontend/react/BUILD.bazel)
+
+[maybe a better example of pnpm workspace bzl](https://github.com/aspect-build/bazel-examples/blob/main/pnpm-workspaces/apps/alpha/src/main.ts)
+
+
+
+## [2023-11-19] swc & tsc
+
+I was trying to use the swc compilation (with each project having a tsconfig extending a base tsconfig.)
+The tsconfigs were building to commonjs - but when I ran my bazel build, outputs still had ESM syntax.  What's the deal?
+The deal is swc doesn't automatically sync with tsconfig. [read about aspect_rules_ts docs transpiler choices](https://docs.aspect.build/rulesets/aspect_rules_ts/docs/transpiler/).  SWC is recommended due to its speed - probably a good candidate when it comes to dev related things, but I don't think it does type checking saddly!  Running compilations with only SWC (not linked to tsconfigs) restuled in errors about "can't use module style import outside of module".  I feel I could've started putting package.json>type: module everywhere but instead I tried to figure out the root cause.  I saw that the .js files generated were ESM, although my tsconfig said commonjs, and went back to check my configurations.  I ended up adding  the following to my bazelrc
+
+```
+# Use "tsc" as the transpiler when ts_project has no `transpiler` set.
+build --@aspect_rules_ts//ts:default_to_tsc_transpiler
+fetch --@aspect_rules_ts//ts:default_to_tsc_transpiler
+query --@aspect_rules_ts//ts:default_to_tsc_transpiler
+```
+
+and removed ts_project attribute: transpiler.
+

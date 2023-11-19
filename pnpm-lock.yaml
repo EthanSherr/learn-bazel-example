@@ -7,10 +7,16 @@ settings:
 importers:
 
   .:
+    dependencies:
+      '@esherr/calculator':
+        specifier: workspace:*
+        version: link:projects/calculator
     devDependencies:
       typescript:
         specifier: 5.2.2
         version: 5.2.2
+
+  projects/calculator: {}
 
   projects/my-ts-project: {}
 

@@ -1,7 +1,6 @@
 load("@aspect_rules_swc//swc:defs.bzl", "swc")
-
-load("@aspect_rules_js//js:defs.bzl", "js_binary")
 load("@aspect_rules_ts//ts:defs.bzl", "ts_project", "ts_config")
+load("@aspect_rules_js//npm:defs.bzl", "npm_package")
 load("@npm//:defs.bzl", "npm_link_all_packages")
 
 # package(default_visibility = ["//examples/project_references:__subpackages__"])
@@ -19,20 +18,22 @@ ts_config(
 npm_link_all_packages()
 
 ts_project(
-    name = "app-project",
+    name = "calculator_ts",
     srcs = [
         "index.ts",
     ],
     tsconfig = ":config",
     # transpiler = swc,
-    deps = ["//:node_modules/@esherr/calculator"],
+    deps = [],
     declaration = True,
     source_map = True,
 )
 
-js_binary(
-    name = "app",
-    # Reference the location where the acorn npm module was linked in the root Bazel package
-    data = [":app-project"],
-    entry_point = "index.js",
+npm_package(
+    name = "calculator",
+    srcs = [
+        "package.json",
+        ":calculator_ts",
+    ],
+    visibility = ["//visibility:public"]
 )

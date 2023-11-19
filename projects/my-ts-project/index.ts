@@ -1,2 +1,5 @@
+import { Calculactor } from "@esherr/calculator";
 
-console.log("hello world! this time from typescript")
+// import { Calculactor } from '../ts-calculator-lib'
+const calc = new Calculactor();
+console.log("hello world! this time from typescript", calc.add(1, 5))

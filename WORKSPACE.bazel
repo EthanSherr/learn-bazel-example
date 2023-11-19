@@ -107,6 +107,9 @@ load("@aspect_rules_js//npm:repositories.bzl", "npm_translate_lock")
 npm_translate_lock(
     name = "npm",
     pnpm_lock = "//:pnpm-lock.yaml",
+    # When I added a .npmrc I didn't have the below line - but .npmrc will be implicitly used.
+    # A warning tells me I should explicitly set it.
+    npmrc = "//:.npmrc",
     verify_node_modules_ignored = "//:.bazelignore",
 )
 
