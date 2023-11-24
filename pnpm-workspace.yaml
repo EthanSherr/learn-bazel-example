@@ -2,3 +2,4 @@ packages:
   - 'projects/node-js-project'
   - 'projects/my-ts-project'
   - 'projects/calculator'
+  - 'projects/react-project'

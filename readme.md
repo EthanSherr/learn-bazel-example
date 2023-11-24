@@ -165,3 +165,54 @@ query --@aspect_rules_ts//ts:default_to_tsc_transpiler
 
 and removed ts_project attribute: transpiler.
 
+
+
+## [2023-11-23] react example
+
+Well I got react working inside bazel, using the CRA example found here
+
+
+I needed a reminder about js_run_devserver rule, which may require some additional config in the workspace - in order to link to a script... [check it out here](https://docs.aspect.build/rulesets/aspect_rules_js/docs/js_run_devserver/) it dsecribes the process of getting a bin entry point for your node modules that are cli's.
+
+This is feeling pretty great!  But there's sort of a problem.  I'm not seeing updates in my frontend, and i'm seeing compilations like
+
+
+```sh
+> ibazel run //projects/react-project:start
+
+Compiled successfully!
+
+You can now view create-react-app in the browser.
+
+  Local:            http://localhost:3000
+  On Your Network:  http://10.0.0.13:3000
+
+Note that the development build is not optimized.
+To create a production build, use npm run build.
+
+webpack compiled successfully
+Watchpack Error (initial scan): Error: ENODEV: no such device, lstat '/Scratch'
+Watchpack Error (initial scan): Error: ENODEV: no such device, lstat '/Video'
+Watchpack Error (initial scan): Error: ENODEV: no such device, lstat '/Cache'
+Watchpack Error (initial scan): Error: ENODEV: no such device, lstat '/Log'
+Watchpack Error (initial scan): Error: ENODEV: no such device, lstat '/archive'
+Watchpack Error (initial scan): Error: ENODEV: no such device, lstat '/work'
+
+```
+
+[potentially good read](https://blog.engflow.com/2023/10/16/coding-in-the-fast-lane-with-ibazel/)
+
+
+## [2023-11-24] trouble with ibazel
+
+when I ran ibazel, i'd see 2 errors in .bazelrc - syntax errors from ibazel.  this was only true of ibazel, not of bazel run nor bazel build.
+I referred to aspect_rules documentation, since that's the syntax error in the bazelrc, thought about providing this config another awy - but ultimately
+I realized that my .bazelversion was 5.4.0, but the latest bazel is 6.4.0;  time to upgrade right?  After and upgrade the problem went away.
+
+I'm still not clear if ibazel is provded by bazel cli.  I'm also a little confused because doing `which bazel` or `which ibazel` it'll point to `/bdi/rt/scripts/*`. 
+However I'm starting to think that bazelisk helps me out here in this repo.  Running `bazel version` in this repo shows me versions corresponding to the .bazelversion.
+running `bazel version` outside of this dir shows me the bazel version of $bdi
+
+SO that's that!  bazelisk! :)  learn more about it eh?
+
+Yay

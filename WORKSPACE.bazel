@@ -106,6 +106,13 @@ load("@aspect_rules_js//npm:repositories.bzl", "npm_translate_lock")
 # https://docs.aspect.build/rulesets/aspect_rules_js/docs/pnpm/
 npm_translate_lock(
     name = "npm",
+    # bins, added for executable like... react-scripts
+    bins = {
+        "react-scripts": [
+            # derived fromt he "bin" attribute in node_modules/react-scripts/package.json
+            "react-scripts=./bin/react-scripts.js",
+        ],
+    },
     pnpm_lock = "//:pnpm-lock.yaml",
     # When I added a .npmrc I didn't have the below line - but .npmrc will be implicitly used.
     # A warning tells me I should explicitly set it.
