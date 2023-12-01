@@ -6,7 +6,7 @@ import ReactDOM from 'react-dom/client';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <div>hello caddn i cdddsafhangddokde itdd haha xoh ss???</div>
+    <div>hello thanks i hey itdd haha xoh ss???</div>
   </React.StrictMode>
 );
 

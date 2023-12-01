@@ -1,5 +1,6 @@
 bazel-bin
 bazel-multi-language-repo
+bazel-learn-bazel-example
 bazel-out
 bazel-testlogs
 node_modules

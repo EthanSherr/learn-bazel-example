@@ -216,3 +216,26 @@ running `bazel version` outside of this dir shows me the bazel version of $bdi
 SO that's that!  bazelisk! :)  learn more about it eh?
 
 Yay
+
+
+[2023-11-30] pip rules (deps) aren't quite right
+I'm on my mac on a fresh slate, I try to `bazel build ...` but there's an error
+about missing "python_deps_*"
+for the following python deps
+
+```sh
+importlib_metadata==6.8.0
+zipp==3.17.0
+```
+
+I was a little confused at first and revisited python_rules documentation, I feel there's a rule like
+
+```py
+    load("@rules_python//python:pip.bzl", "compile_pip_requirements")
+```
+
+which may be used to pull in requirements, i'm not sure.  But what's weird is that these deps weren't pulled in from my first list.  Maybe I had those locally on my other comp?  argg!  That means the deps aren't really sealed.  unsure.  I added deps to my /third-party/requirements_lock.yaml but I feel there's something to be learned [here](https://github.com/bazelbuild/rules_python/blob/main/examples/pip_parse/BUILD.bazel)
+
+Also reading in the docs there may be some hermetic issues [here](https://rules-python.readthedocs.io/en/latest/getting-started.html#using-a-workspace-file)
+
+in all the confusion I made requirements.in but i'm not really using it.

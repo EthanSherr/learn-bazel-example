@@ -1,9 +1,11 @@
-load("@aspect_rules_swc//swc:defs.bzl", "swc")
 load("@npm//:defs.bzl", "npm_link_all_packages")
 
 # TS
 load("@aspect_bazel_lib//lib:copy_to_bin.bzl", "copy_to_bin")
 load("@aspect_rules_ts//ts:defs.bzl", "ts_config")
+
+# py
+# load("@rules_python//python:pip.bzl", "compile_pip_requirements")
 
 npm_link_all_packages(name = "node_modules")
 
@@ -22,3 +24,12 @@ copy_to_bin(
     name = "tsconfig-base",
     srcs = ["tsconfig-base.json"],
 )
+
+## python deps
+
+# compile_pip_requirements(
+#     name = "requirements",
+#     srcs = ["requirements.in"],
+#     requirements_txt = "requirements_lock.txt",
+#     # requirements_windows = "requirements_windows.txt",
+# )
