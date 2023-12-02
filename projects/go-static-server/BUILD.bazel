@@ -1,0 +1,49 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_binary")
+load("//projects/go-static-server:go_static_server_binary.bzl", "go_static_server_binary")
+
+# go_library(
+#     name = "calculator",
+#     srcs = [
+#         "calculator.go",
+#     ],
+#     importpath = "calculator",
+#     visibility = ["//visibility:public"],
+#     deps = [],
+# )
+
+filegroup(
+    name = "static_files",
+    srcs = glob(["static/**"]),
+)
+
+go_binary(
+    name = "main",
+    srcs = ["main.go"],
+)
+
+# go_static_server_binary(
+#     name = "dev",
+#     data = [":static_files"],
+# )
+
+go_static_server_binary(
+    name = "dev",
+    data = [":static_files"],
+)
+
+# Create a Go library to depend on the static files
+# go_library(
+#     name = "static_lib",
+#     srcs = ["static_lib.go"],  # You may need an empty Go file here
+#     data = [":static_files"],
+#     visibility = ["//visibility:public"],
+# )
+
+# go_binary(
+#     name = "dev",
+#     srcs = ["main.go"],
+#     # outs = "bin/main",
+#     # data = [":static_files"],
+#     data = [":static_files"],
+#     # files = [":static_files"],
+# )

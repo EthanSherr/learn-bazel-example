@@ -239,3 +239,6 @@ which may be used to pull in requirements, i'm not sure.  But what's weird is th
 Also reading in the docs there may be some hermetic issues [here](https://rules-python.readthedocs.io/en/latest/getting-started.html#using-a-workspace-file)
 
 in all the confusion I made requirements.in but i'm not really using it.
+
+
+VITE: https://github.com/bazelbuild/examples/tree/main/frontend/vue

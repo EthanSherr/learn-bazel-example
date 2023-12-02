@@ -3,4 +3,4 @@ packages:
   - 'projects/my-ts-project'
   - 'projects/calculator'
   - 'projects/react-project'
-  - 'projects/my-react-vite-app'
+  - 'projects/my-vite-app'
