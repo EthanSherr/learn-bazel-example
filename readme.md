@@ -242,3 +242,128 @@ in all the confusion I made requirements.in but i'm not really using it.
 
 
 VITE: https://github.com/bazelbuild/examples/tree/main/frontend/vue
+
+
+
+using data for copying to bin - recursing through file group structure sucks
+https://stackoverflow.com/questions/38905256/bazel-copy-multiple-files-to-binary-directory
+
+bazel cquery //: --output=files
+
+[12/3/2023]
+I made a vite react app which has a dev server, but also I made a static golang server that caches everything except index.html.  Perhaps these cached times need to be less than 1 year but I like the idea of the bundle being cached forevs.  I can use this during deployment instead of nginx, and maybe I'll set up a distroless build for my static react webapps from now on.
+
+I learned how to shell into a :debug distroless image, with `docker run --entrypoint=sh -ti coolimg`
+
+I've also learned that the go_binary's name "app" is also going to the the image's "entrypoint"
+
+Problem:
+
+exec /app: exec format error
+
+```json
+[
+    {
+        "Id": "sha256:e77a5a1369988f124adcaee385071e0dfd8efaf3f468ce967352246a56be5372",
+        "RepoTags": [
+            "coolimg:latest"
+        ],
+        "RepoDigests": [],
+        "Parent": "",
+        "Comment": "",
+        "Created": "0001-01-01T00:00:00Z",
+        "Container": "",
+        "ContainerConfig": {
+            "Hostname": "",
+            "Domainname": "",
+            "User": "",
+            "AttachStdin": false,
+            "AttachStdout": false,
+            "AttachStderr": false,
+            "Tty": false,
+            "OpenStdin": false,
+            "StdinOnce": false,
+            "Env": null,
+            "Cmd": null,
+            "Image": "",
+            "Volumes": null,
+            "WorkingDir": "",
+            "Entrypoint": null,
+            "OnBuild": null,
+            "Labels": null
+        },
+        "DockerVersion": "",
+        "Author": "",
+        "Config": {
+            "Hostname": "",
+            "Domainname": "",
+            "User": "0",
+            "AttachStdin": false,
+            "AttachStdout": false,
+            "AttachStderr": false,
+            "Tty": false,
+            "OpenStdin": false,
+            "StdinOnce": false,
+            "Env": [
+                "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/busybox",
+                "SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt"
+            ],
+            "Cmd": null,
+            "Image": "",
+            "Volumes": null,
+            "WorkingDir": "/",
+            "Entrypoint": [
+                "/app"
+            ],
+            "OnBuild": null,
+            "Labels": null
+        },
+        "Architecture": "amd64",
+        "Os": "linux",
+        "Size": 26572476,
+        "VirtualSize": 26572476,
+        "GraphDriver": {
+            "Data": {
+                "LowerDir": "/var/lib/docker/overlay2/2ac201a458aec092ccbaacd7ebb67e101632561cd6f8762c1bac069238bf2f83/diff:/var/lib/docker/overlay2/ebf3e0d65f99b0ad7be258f9b296b480e832a5b42dcf458efc22cf77eae8ee0d/diff:/var/lib/docker/overlay2/581fdebca22ea65afb02dc6b39916ac8ceb5ba10f97b29f8b2f0540d9a74376a/diff:/var/lib/docker/overlay2/1fbe86d4d50417af58be476aa894d682077d2656996df15ef4b2b546f34d155c/diff:/var/lib/docker/overlay2/7963f30506316a1298ef98987cc25727614354082d03c0b2269a4146a5a235d1/diff:/var/lib/docker/overlay2/ea0098b1c0582142a8e90a3f70bc666973988b3780af3d0bdb2f0ad6eb39825c/diff:/var/lib/docker/overlay2/9030639a6fda6712c13bbd102fec6978d737166bf09a709934787c8ce20e1188/diff:/var/lib/docker/overlay2/6ad828d8e3492189ccaf83502d73f61394249b395dd9b38440c2e0e2e503d6db/diff:/var/lib/docker/overlay2/2832e97df896d86a753a916621625967eb826adce47bb924742b25393671f82b/diff:/var/lib/docker/overlay2/8d63eb18e43f3a9fe7c7537c1a9118e615a12d5414cc4f4213a846dd25b29af9/diff:/var/lib/docker/overlay2/f1a77baad8cf303fdedf5f40dd03c47d70aab3630feebe63dbe638510b455993/diff:/var/lib/docker/overlay2/6950be000d127247e6b806df7a5b1907458492562aae1ecbef50129b24012034/diff:/var/lib/docker/overlay2/c4d35c3a94a268399a1ac50348cdaa1f9dbff55272c7fcde9d0929ffd5f90b73/diff",
+                "MergedDir": "/var/lib/docker/overlay2/06e75955dc550d1d56e4a6d32e9c0266e27313b4ff9c11a5a8ee6ea1e74443bb/merged",
+                "UpperDir": "/var/lib/docker/overlay2/06e75955dc550d1d56e4a6d32e9c0266e27313b4ff9c11a5a8ee6ea1e74443bb/diff",
+                "WorkDir": "/var/lib/docker/overlay2/06e75955dc550d1d56e4a6d32e9c0266e27313b4ff9c11a5a8ee6ea1e74443bb/work"
+            },
+            "Name": "overlay2"
+        },
+        "RootFS": {
+            "Type": "layers",
+            "Layers": [
+                "sha256:54ad2ec71039b74f7e82f020a92a8c2ca45f16a51930d539b56973a18b8ffe8d",
+                "sha256:6fbdf253bbc2490dcfede5bdb58ca0db63ee8aff565f6ea9f918f3bce9e2d5aa",
+                "sha256:7bea6b893187b14fc0a759fe5f8972d1292a9c0554c87cbf485f0947c26b8a05",
+                "sha256:ff5700ec54186528cbae40f54c24b1a34fb7c01527beaa1232868c16e2353f52",
+                "sha256:d52f02c6501c9c4410568f0bf6ff30d30d8290f57794c308fe36ea78393afac2",
+                "sha256:e624a5370eca2b8266e74d179326e2a8767d361db14d13edd9fb57e408731784",
+                "sha256:1a73b54f556b477f0a8b939d13c504a3b4f4db71f7a09c63afbc10acb3de5849",
+                "sha256:d2d7ec0f6756eb51cf1602c6f8ac4dd811d3d052661142e0110357bf0b581457",
+                "sha256:4cb10dd2545bd173858450b80853b850e49608260f1a0789e0d0b39edf12f500",
+                "sha256:f33e343848bd9064955eb26f7cdaa1a313116ff7cbae32b1b539dbcee622a593",
+                "sha256:714f56238fb5a6e9cde67167648f2d4af7702c2fa07b9de428970fb9b0693e4c",
+                "sha256:c8beeff22ce7a27d75ad5f57277fc1859f7107f02a2c0548b9e892fe53fffb5d",
+                "sha256:c1ccea363d309ca278c59dc8f3755b539238d4f200217c33eef04ee37e1c01c3",
+                "sha256:be9dc4f8ce204bc0f281ae078298db33c2daa11381c0695c14da633d461d78ba"
+            ]
+        },
+        "Metadata": {
+            "LastTagTime": "0001-01-01T00:00:00Z"
+        }
+    }
+]
+```
+
+what arch is my docker vm?
+`docker system info | grep -i "OSType\|Architecture"`
+
+oci_pull : architectures
+for multi-architecture images, a dictionary of the platforms it supports This creates a separate external repository for each platform, avoiding fetching layers.m
+
+SOLVED: [this link](https://stackoverflow.com/questions/73285601/docker-exec-usr-bin-sh-exec-format-error) helped me realize my go was compiled to run on my mac - but needed to be compiled to run on linux/amd64 which is equal to my docker vm's architecture.  Normally this is done with GOOS param of "go build" tool [see here](https://stackoverflow.com/questions/52939149/exec-format-error-with-docker-run-command): `env GOOS=linux go build  -o ../bin` but in my world I am using rules_go.  I went to see if go_binary had any way of setting the architecture of GOOS and it does have attributes `goarch` and `goos` which you can [see here](https://github.com/bazelbuild/rules_go/blob/master/docs/go/core/rules.md#go_binary-goos) they recommend setting a --platforms param to set arch instead of forcing the rule to use a certain arch - for more information [see crosscompilation](https://github.com/bazelbuild/rules_go/blob/master/docs/go/core/cross_compilation.md#cross-compilation).  Now my images will run! yes.
+
+I'm running with: `docker run -e STATIC_DIR=/usr/share/static/html -e PORT=3000 -p 3000:3000 coolimg`
+Slight problem because i need to actually do `/usr/share/static/html/dist`
