@@ -2,8 +2,6 @@ load("@npm//:defs.bzl", "npm_link_all_packages")
 load("@npm//projects/my-vite-app:vite/package_json.bzl", vite_bin = "bin")
 load("//projects/go-static-server:go_static_server_binary.bzl", "go_static_server_binary")
 load("//projects/go-static-server:go_static_server_tarball.bzl", "go_static_server_tarball")
-load("@rules_pkg//pkg:tar.bzl", "pkg_tar")
-load("@rules_oci//oci:defs.bzl", "oci_image", "oci_tarball")
 
 # This macro expands to a link_npm_package for each third-party package in package.json
 npm_link_all_packages(name = "node_modules")
@@ -61,35 +59,8 @@ vite_bin.vite_binary(
 # )
 
 # custom static server
-pkg_tar(
-    name = "tar",
-    srcs = [":app"],
-)
-
-pkg_tar(
-    name = "static_tar",
-    srcs = [":build"],
-    package_dir = "/usr/share/static/html",
-)
-
-oci_image(
-    name = "frontend_image",
-    base = "@distroless_base",
-    entrypoint = ["/app"],
-    tars = [
-        ":tar",
-        ":static_tar",
-    ],
-)
-
-oci_tarball(
-    name = "frontend_tarball",
-    image = ":frontend_image",
-    repo_tags = ["coolimg:latest"],
-)
-
 go_static_server_tarball(
     name = "tarball",
-    repo_tags = ["coolestimage:latest"],
+    repo_tags = ["my-vite-app:latest"],
     vite_tar_srcs = [":build"],
 )
