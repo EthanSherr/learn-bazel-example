@@ -1,18 +1,23 @@
-load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_library", "go_test")
-
+load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_cross_binary", "go_library")
 
 go_library(
     name = "calculator",
     srcs = [
-        "calculator.go"
+        "calculator.go",
     ],
     importpath = "calculator",
+    visibility = ["//visibility:public"],
     deps = [],
-    visibility = ["//visibility:public"]
 )
 
 go_binary(
     name = "main",
     srcs = ["main.go"],
-    deps = [":calculator"]
+    deps = [":calculator"],
+)
+
+go_cross_binary(
+    name = "main_linux_amd64",
+    platform = "@io_bazel_rules_go//go/toolchain:linux_amd64",
+    target = ":main",
 )

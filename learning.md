@@ -2,6 +2,7 @@
 - [aspect rules](https://docs.aspect.build/rules/)
 - [aspect rules - examples](https://github.com/aspect-build/bazel-examples)
 - [aspect rules - rules_oci usage](https://github.com/bazel-contrib/rules_oci)
+- [rules_js examples](https://github.com/aspect-build/rules_js/tree/main/examples)
 
 - [rules_go](https://github.com/bazelbuild/rules_go)
 

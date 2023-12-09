@@ -50,14 +50,6 @@ vite_bin.vite_binary(
     data = SRCS + BUILD_DEPS,
 )
 
-# build_test(
-#     name = "build_test",
-#     targets = [
-#         ":build",
-#         ":type-check",
-#     ],
-# )
-
 # custom static server
 go_static_server_tarball(
     name = "tarball",

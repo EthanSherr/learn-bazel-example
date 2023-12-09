@@ -41,4 +41,5 @@ query --@aspect_rules_ts//ts:default_to_tsc_transpiler
 # https://github.com/bazelbuild/rules_go/blob/master/docs/go/core/cross_compilation.md#cross-compilation 
 # running into issues when trying to run my go binaries on mac's vm: which is amd64.
 # seeing exec /app: format error
-build --platforms=@io_bazel_rules_go//go/toolchain:linux_amd64
+# build --platforms=@io_bazel_rules_go//go/toolchain:linux_amd64
+# wow!  this causes an issue when running js_binary, as the node executable is for linux! arg

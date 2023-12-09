@@ -58,6 +58,13 @@ go_register_toolchains(version = "1.20.7")
 # rules_ts
 ###########
 http_archive(
+    name = "aspect_rules_js",
+    sha256 = "a949d56fed8fa0a8dd82a0a660acc949253a05b2b0c52a07e4034e27f11218f6",
+    strip_prefix = "rules_js-1.33.1",
+    url = "https://github.com/aspect-build/rules_js/releases/download/v1.33.1/rules_js-v1.33.1.tar.gz",
+)
+
+http_archive(
     name = "aspect_rules_ts",
     sha256 = "bd3e7b17e677d2b8ba1bac3862f0f238ab16edb3e43fb0f0b9308649ea58a2ad",
     strip_prefix = "rules_ts-2.1.0",
@@ -67,33 +74,13 @@ http_archive(
 load("@aspect_rules_ts//ts:repositories.bzl", "rules_ts_dependencies")
 
 rules_ts_dependencies(
-    # This keeps the TypeScript version in-sync with the editor, which is typically best.
+    # This keeps the TypeScript version in-sync with the editor
     ts_version_from = "//:package.json",
-
-    # Alternatively, you could pick a specific version, or use
-    # load("@aspect_rules_ts//ts:repositories.bzl", "LATEST_TYPESCRIPT_VERSION")
-    # ts_version = LATEST_TYPESCRIPT_VERSION
 )
-
-###########
-# start of nodejs
-###########
-
-# ?? do i need to do this?  now that I have rules_ts_dependencies I don't think I do...right?
-# http_archive(
-#     name = "aspect_rules_js",
-#     sha256 = "a949d56fed8fa0a8dd82a0a660acc949253a05b2b0c52a07e4034e27f11218f6",
-#     strip_prefix = "rules_js-1.33.1",
-#     url = "https://github.com/aspect-build/rules_js/releases/download/v1.33.1/rules_js-v1.33.1.tar.gz",
-# )
 
 load("@aspect_rules_js//js:repositories.bzl", "rules_js_dependencies")
 
 rules_js_dependencies()
-
-# for convenience npm_translate_lock does this call for me.  I may not need it I think, as seen bellow from rules_js setup
-# load("@bazel_features//:deps.bzl", "bazel_features_deps")
-# bazel_features_deps()
 
 load("@rules_nodejs//nodejs:repositories.bzl", "DEFAULT_NODE_VERSION", "nodejs_register_toolchains")
 
@@ -101,11 +88,6 @@ nodejs_register_toolchains(
     name = "nodejs",
     node_version = DEFAULT_NODE_VERSION,
 )
-
-# For convenience, npm_translate_lock does this call automatically.
-# Uncomment if you don't call npm_translate_lock at all.
-# load("@bazel_features//:deps.bzl", "bazel_features_deps")
-# bazel_features_deps()
 
 load("@aspect_rules_js//npm:repositories.bzl", "npm_translate_lock")
 
@@ -195,15 +177,11 @@ load("@rules_oci//oci:pull.bzl", "oci_pull")
 
 oci_pull(
     name = "distroless_base",
-    # digest = "sha256:ccaef5ee2f1850270d453fdf700a5392534f8d1a8ca2acda391fbb6a06b81c86",
-    image = "gcr.io/distroless/base:debug",
-    # platforms = [
-    #     # "linux/amd64",
-    #     # "linux/arm64",
-    #     "linux/x86_64",
-    # ],
+    digest = "sha256:ccaef5ee2f1850270d453fdf700a5392534f8d1a8ca2acda391fbb6a06b81c86",
+    image = "gcr.io/distroless/base",
     platforms = [
         "linux/amd64",
+        "linux/arm64",
     ],
 )
 

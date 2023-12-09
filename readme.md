@@ -367,3 +367,35 @@ SOLVED: [this link](https://stackoverflow.com/questions/73285601/docker-exec-usr
 
 I'm running with: `docker run -e STATIC_DIR=/usr/share/static/html -e PORT=3000 -p 3000:3000 coolimg`
 Slight problem because i need to actually do `/usr/share/static/html/dist`
+
+
+
+[2023-12-04]
+## realizing the running js_binary are like throwing
+
+```sh
+ learn-bazel-example % bazel run //projects/node-js-project:app
+INFO: Analyzed target //projects/node-js-project:app (0 packages loaded, 0 targets configured).
+INFO: Found 1 target...
+Target //projects/node-js-project:app up-to-date:
+  bazel-bin/projects/node-js-project/app.sh
+INFO: Elapsed time: 0.713s, Critical Path: 0.00s
+INFO: 1 process: 1 internal.
+INFO: Build completed successfully, 1 total action
+INFO: Running command line: bazel-bin/projects/node-js-project/app.sh
+/private/var/tmp/_bazel_ethan/ad2cacaf0eb0e5ff04627e08288c4d7d/execroot/__main__/bazel-out/darwin-fastbuild/bin/projects/node-js-project/app.sh.runfiles/__main__/projects/node-js-project/app_node_bin/node: line 5: /private/var/tmp/_bazel_ethan/ad2cacaf0eb0e5ff04627e08288c4d7d/execroot/__main__/bazel-out/darwin-fastbuild/bin/projects/node-js-project/app.sh.runfiles/__main__/../nodejs_linux_amd64/bin/nodejs/bin/node: cannot execute binary file
+/private/var/tmp/_bazel_ethan/ad2cacaf0eb0e5ff04627e08288c4d7d/execroot/__main__/bazel-out/darwin-fastbuild/bin/projects/node-js-project/app.sh.runfiles/__main__/projects/node-js-project/app_node_bin/node: line 5: /private/var/tmp/_bazel_ethan/ad2cacaf0eb0e5ff04627e08288c4d7d/execroot/__main__/bazel-out/darwin-fastbuild/bin/projects/node-js-project/app.sh.runfiles/__main__/../nodejs_linux_amd64/bin/nodejs/bin/node: Undefined error: 0
+```
+
+Here's what's up [link](https://superuser.com/questions/724301/how-to-solve-bash-cannot-execute-binary-file).  the file `/private/var/tmp/_bazel_ethan/ad2cacaf0eb0e5ff04627e08288c4d7d/execroot/__main__/bazel-out/darwin-fastbuild/bin/projects/node-js-project/app.sh.runfiles/__main__/../nodejs_linux_amd64/bin/nodejs/bin`
+
+```sh
+file ./node 
+./node: ELF 64-bit LSB executable, x86-64, version 1 (GNU/Linux), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, for GNU/Linux 2.6.32, BuildID[sha1]=fdf38d88cf0d6dba68640a292d23ab56a2022b31, with debug_info, not stripped
+```
+
+[12/09/2023]ß
+I've learned that the following flat in bazelrc causes node_rules to download the linux_amd64 distro of node.
+```sh
+build --platforms=@io_bazel_rules_go//go/toolchain:linux_amd64
+```

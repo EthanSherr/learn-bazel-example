@@ -4,7 +4,7 @@ load("@rules_oci//oci:defs.bzl", "oci_image", "oci_tarball")
 def go_static_server_tarball(name, vite_tar_srcs, repo_tags):
     pkg_tar(
         name = "static-server-tar",
-        srcs = ["//projects/go-static-server:static-server"],
+        srcs = ["//projects/go-static-server:static-server-amd64"],
     )
 
     pkg_tar(
@@ -16,7 +16,7 @@ def go_static_server_tarball(name, vite_tar_srcs, repo_tags):
     oci_image(
         name = "frontend-image",
         base = "@distroless_base",
-        entrypoint = ["/static-server"],
+        entrypoint = ["/static-server-amd64"],
         tars = [
             ":static-server-tar",
             ":static-tar",
