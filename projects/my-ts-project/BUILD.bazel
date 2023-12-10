@@ -1,7 +1,5 @@
-load("@aspect_rules_swc//swc:defs.bzl", "swc")
-
 load("@aspect_rules_js//js:defs.bzl", "js_binary")
-load("@aspect_rules_ts//ts:defs.bzl", "ts_project", "ts_config")
+load("@aspect_rules_ts//ts:defs.bzl", "ts_config", "ts_project")
 load("@npm//:defs.bzl", "npm_link_all_packages")
 
 # package(default_visibility = ["//examples/project_references:__subpackages__"])
@@ -11,7 +9,7 @@ ts_config(
     name = "config",
     src = "tsconfig.json",
     deps = [
-    #    "tsconfig-extended.json",
+        #    "tsconfig-extended.json",
         "//:tsconfig",
     ],
 )
@@ -23,11 +21,11 @@ ts_project(
     srcs = [
         "index.ts",
     ],
+    declaration = True,
+    source_map = True,
     tsconfig = ":config",
     # transpiler = swc,
     deps = ["//:node_modules/@esherr/calculator"],
-    declaration = True,
-    source_map = True,
 )
 
 js_binary(
