@@ -10,9 +10,15 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "grpc-tools": "^1.12.4",
+    "ts-proto": "^1.165.2",
     "typescript": "5.2.2"
   },
   "dependencies": {
-    "@esherr/calculator": "workspace:*"
+    "@esherr/calculator": "workspace:*",
+    "long": "^5.2.3",
+    "nice-grpc": "^2.1.7",
+    "nice-grpc-common": "^2.0.2",
+    "protobufjs": "^7.2.5"
   }
 }

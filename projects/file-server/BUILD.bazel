@@ -1,0 +1,97 @@
+load("@aspect_rules_js//js:defs.bzl", "js_binary")
+load("@npm//:grpc-tools/package_json.bzl", grpc_tools_bin = "bin")
+
+# load("@npm//projects/my-vite-app:vite/package_json.bzl", vite_bin = "bin")
+load("@aspect_rules_ts//ts:defs.bzl", "ts_config", "ts_project")
+load("@npm//:defs.bzl", "npm_link_all_packages")
+load("//projects/file-server:nice_grpc_proto.bzl", "nice_grpc_proto")
+
+# package(default_visibility = ["//examples/project_references:__subpackages__"])
+
+# Demonstrate that transitive tsconfig extends clauses work
+ts_config(
+    name = "config",
+    src = "tsconfig.json",
+    deps = [
+        "//:tsconfig",
+    ],
+)
+
+npm_link_all_packages()
+
+ts_project(
+    name = "app-project",
+    srcs = [
+        "index.ts",
+    ],
+    declaration = True,
+    source_map = True,
+    tsconfig = ":config",
+    # transpiler = swc,
+    deps = [],
+)
+
+js_binary(
+    name = "app",
+    # Reference the location where the acorn npm module was linked in the root Bazel package
+    data = [":app-project"],
+    entry_point = "index.js",
+)
+
+# projects/file-server/protos/file.proto
+SRCS = [
+    "proto/file.proto",
+]
+
+BUILD_DEPS = ["//:node_modules/" + d for d in [
+    "long",
+    "nice-grpc",
+    "nice-grpc-common",
+    "protobufjs",
+    "ts-proto",
+    "grpc-tools",
+]]
+
+grpc_tools_bin.grpc_tools_node_protoc(
+    name = "ts_protos",
+    srcs = SRCS + BUILD_DEPS,
+    args = [
+        "--plugin=protoc-gen-ts_proto=../../node_modules/.bin/protoc-gen-ts_proto",
+        "--ts_proto_out=./compiledProtos",
+        "--ts_proto_opt=outputServices=nice-grpc,outputServices=generic-definitions,useExactTypes=true,outputPartialMethods=false,oneof=unions",
+        "--proto_path=./proto",
+        "./proto/file.proto",
+    ],
+    chdir = package_name(),
+    out_dirs = ["compiledProtos"],
+    visibility = ["//visibility:public"],
+)
+
+nice_grpc_proto(
+    name = "foo",
+    chdir = package_name(),
+)
+
+genrule(
+    name = "gen_rule_foo",
+    srcs = ["generate_files.sh"],
+    outs = [
+        "file1.txt",
+        "file2.txt",
+        "file3.txt",
+    ],
+    cmd = "./generate_files.sh $@",
+)
+
+# ts_project(
+#     name = "ts_protos_lib",
+#     srcs = [
+#         "idk.ts",
+#     ],
+#     declaration = True,
+#     source_map = True,
+#     tsconfig = ":config",
+
+#     # transpiler = swc,
+#     deps = [":ts_protos"],
+# )

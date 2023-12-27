@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package filestream;
+
+service FileService {
+  rpc GetFile (FileRequest) returns (stream FileResponse);
+}
+
+message FileRequest {
+  string name = 1;
+}
+
+message FileResponse {
+  oneof response {
+    FileChunk chunk = 1;
+    FileMetadata metadata = 2;
+  }
+}
+
+message FileChunk {
+  bytes chunk_data = 1;
+}
+
+message FileMetadata {
+  string filename = 1;
+  string mime_type = 2;
+  uint64 file_size = 3;
+}

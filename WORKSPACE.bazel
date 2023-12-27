@@ -104,6 +104,16 @@ npm_translate_lock(
             # derived from the "bin" attribute in node_modules/vite/package.json
             "vite=./bin/vite.js",
         ],
+        # ??? not sure if this is right.
+        # grpc_tools_node_protoc the name of the binary
+        # grpc-tools, the dir in node-modules
+        # ./bin/protoc.js the bin in the grpc-tools/package.json for grpc_tools_node_protoc
+        "grpc-tools": [
+            "grpc_tools_node_protoc=./bin/protoc.js",
+        ],
+        "ts-proto": [
+            "protoc-gen-ts_proto=./protoc-gen-ts_proto",
+        ],
     },
     # When I added a .npmrc I didn't have the below line - but .npmrc will be implicitly used.
     # A warning tells me I should explicitly set it.

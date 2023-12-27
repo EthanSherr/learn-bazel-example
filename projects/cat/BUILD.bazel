@@ -1,0 +1,23 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+genrule(
+    name = "generate_hello_go",
+    outs = ["hello.go"],
+    cmd = """
+cat << EOF >> $@
+package main
+
+import "fmt"
+
+func main() {
+  fmt.Printf("Hello World!")
+}
+EOF
+""",
+)
+
+go_library(
+    name = "generate_hello_go_lib",
+    srcs = ["hello.go"],
+    importpath = "github.com/esherr/hello-world",
+)

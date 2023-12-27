@@ -1,6 +1,7 @@
 packages:
-  - 'projects/node-js-project'
-  - 'projects/my-ts-project'
-  - 'projects/calculator'
-  - 'projects/react-project'
-  - 'projects/my-vite-app'
+  - "projects/node-js-project"
+  - "projects/my-ts-project"
+  - "projects/calculator"
+  - "projects/react-project"
+  - "projects/my-vite-app"
+  - "projects/file-server"

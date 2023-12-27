@@ -1,0 +1,15 @@
+genrule(
+    name = "generate_hello_go",
+    outs = ["hello.go"],
+    cmd = """,
+cat << EOF >> $@
+package main
+
+import "fmt"
+
+func main() {
+  fmt.Printf("Hello World!")
+}
+EOF
+""",
+)
