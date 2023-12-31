@@ -3,7 +3,7 @@ load("@bazel_skylib//rules:write_file.bzl", "write_file")
 load("@npm//:defs.bzl", "npm_link_all_packages")
 
 # load("@aspect_rules_swc//swc:defs.bzl", "swc")
-load("@aspect_rules_ts//ts:defs.bzl", "ts_config", "ts_project")
+load("@aspect_rules_ts//ts:defs.bzl", "ts_project")
 load("@aspect_rules_js//npm:defs.bzl", "npm_package")
 
 npm_link_all_packages()
@@ -89,15 +89,6 @@ sh_binary(
     data = _GENERATED.keys(),
 )
 
-ts_config(
-    name = "config",
-    src = "tsconfig.json",
-    deps = [
-        #    "tsconfig-extended.json",
-        "//:tsconfig",
-    ],
-)
-
 ts_project(
     name = "file_server_protos_proj",
     srcs = [
@@ -106,7 +97,7 @@ ts_project(
     ],
     declaration = True,
     source_map = True,
-    tsconfig = ":config",
+    tsconfig = "//:tsconfig",
     # transpiler = swc,
     deps = BUILD_DEPS,  #TODO prune to only necessary runtime deps
 )

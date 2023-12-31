@@ -36,11 +36,6 @@ js_binary(
     entry_point = "index.js",
 )
 
-# nice_grpc_proto(
-#     name = "foo",
-#     chdir = package_name(),
-# )
-
 ts_project(
     name = "idk",
     srcs = [
@@ -51,7 +46,6 @@ ts_project(
     tsconfig = ":config",
     # transpiler = swc,
     deps = [
-        # ":ts_protos_lib",
         "//:node_modules/@esherr/file-server-protos",
     ],
 )
