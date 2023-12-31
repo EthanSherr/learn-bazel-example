@@ -1,0 +1,121 @@
+load("@npm//:grpc-tools/package_json.bzl", grpc_tools_bin = "bin")
+load("@bazel_skylib//rules:write_file.bzl", "write_file")
+load("@npm//:defs.bzl", "npm_link_all_packages")
+
+# load("@aspect_rules_swc//swc:defs.bzl", "swc")
+load("@aspect_rules_ts//ts:defs.bzl", "ts_config", "ts_project")
+load("@aspect_rules_js//npm:defs.bzl", "npm_package")
+
+npm_link_all_packages()
+
+file_name = "file.proto"
+
+base_name = file_name.replace(".proto", "")
+
+SRCS = [file_name]
+
+BUILD_DEPS = ["//:node_modules/" + d for d in [
+    "long",
+    "nice-grpc",
+    "nice-grpc-common",
+    "protobufjs",
+    "ts-proto",
+    "grpc-tools",
+]]
+
+gen_target = base_name + "_generated"
+
+grpc_tools_bin.grpc_tools_node_protoc(
+    name = gen_target,
+    srcs = SRCS + BUILD_DEPS,
+    # out_dirs = ["ts_protos_foo"],
+    outs = ["file.ts"],
+    args = [
+        "--plugin=protoc-gen-ts_proto=../../node_modules/.bin/protoc-gen-ts_proto",
+        "--ts_proto_out=./",
+        "--ts_proto_opt=outputServices=nice-grpc,outputServices=generic-definitions,useExactTypes=true,outputPartialMethods=false,oneof=unions",
+        "--proto_path=./",
+        "./file.proto",
+    ],
+    chdir = package_name(),
+    visibility = ["//visibility:public"],
+)
+
+write_index_target = base_name + "_index"
+
+write_file(
+    name = write_index_target,
+    out = "index.ts",
+    content = ["export * from \"./{}\";".format(base_name)],
+)
+
+# Map from some source file to a target that produces it.
+# This recipe assumes you already have some such targets.
+_GENERATED = {
+    "//projects/file-server-protos:" + base_name + ".ts": "projects/file-server-protos",
+    "//projects/file-server-protos:" + "index.ts": "projects/file-server-protos",
+    # ...
+}
+
+# copy
+write_file(
+    name = "gen_update",
+    out = "update.sh",
+    content = [
+        # This depends on bash, would need tweaks for Windows
+        "#!/usr/bin/env bash",
+        # Bazel gives us a way to access the source folder!
+        "cd $BUILD_WORKSPACE_DIRECTORY",
+        "echo $BUILD_WORKSPACE_DIRECTORY",
+    ] + [
+        # Paths are now relative to the workspace.
+        # We can copy files from bazel-bin to the sources
+        "cp -fv bazel-bin/{0} {1}".format(
+            # Convert label to path
+            k.replace(":", "/"),
+            v,
+        )
+        for [
+            k,
+            v,
+        ] in _GENERATED.items()
+    ],
+)
+
+# This is what you can `bazel run` and it can write to the source folder
+sh_binary(
+    name = "update",
+    srcs = ["update.sh"],
+    data = _GENERATED.keys(),
+)
+
+ts_config(
+    name = "config",
+    src = "tsconfig.json",
+    deps = [
+        #    "tsconfig-extended.json",
+        "//:tsconfig",
+    ],
+)
+
+ts_project(
+    name = "file_server_protos_proj",
+    srcs = [
+        "file.ts",
+        "index.ts",
+    ],
+    declaration = True,
+    source_map = True,
+    tsconfig = ":config",
+    # transpiler = swc,
+    deps = BUILD_DEPS,  #TODO prune to only necessary runtime deps
+)
+
+npm_package(
+    name = "file-server-protos",
+    srcs = [
+        "package.json",
+        ":file_server_protos_proj",
+    ],
+    visibility = ["//visibility:public"],
+)

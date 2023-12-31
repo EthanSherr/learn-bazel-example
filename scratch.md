@@ -481,3 +481,7 @@ projects/file-server/ts_protos_foo/file.ts(295,39): error TS7017: Element implic
 projects/file-server/ts_protos_foo/file.ts(307,18): error TS7017: Element implicitly has an 'any' type because type 'typeof globalThis' has no index signature.
 projects/file-server/ts_protos_foo/file.ts(308,23): error TS7017: Element implicitly has an 'any' type because type 'typeof globalThis' has no index signature.
 ```
+
+## still unsure how to do this...
+
+[writing to workspace with bazel run - alex eagle](https://www.aspect.dev/blog/bazel-can-write-to-the-source-folder)

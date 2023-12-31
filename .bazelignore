@@ -5,3 +5,7 @@ projects/calculator/node_modules
 projects/react-project/node_modules
 projects/my-vite-app/node_modules
 projects/file-server/node_modules
+projects/ts-protos-foo/node_modules
+bazel-bin/projects/file-server/ts-protos-foo-generated/node_modules
+bazel-bin/projects/file-server/file_proto/ts-protos-foo-generated/node_modules
+projects/file-server-protos/node_modules

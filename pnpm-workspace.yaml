@@ -5,3 +5,6 @@ packages:
   - "projects/react-project"
   - "projects/my-vite-app"
   - "projects/file-server"
+  - "projects/ts-protos-foo"
+  # - "bazel-bin/projects/file-server/file_proto/ts-protos-foo-generated"
+  - "projects/file-server-protos"

@@ -11,6 +11,9 @@ importers:
       '@esherr/calculator':
         specifier: workspace:*
         version: link:projects/calculator
+      '@esherr/file-server-protos':
+        specifier: workspace:*
+        version: link:projects/file-server-protos
       long:
         specifier: ^5.2.3
         version: 5.2.3
@@ -37,6 +40,8 @@ importers:
   projects/calculator: {}
 
   projects/file-server: {}
+
+  projects/file-server-protos: {}
 
   projects/my-ts-project: {}
 

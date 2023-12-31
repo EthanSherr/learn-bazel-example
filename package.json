@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@esherr/calculator": "workspace:*",
+    "@esherr/file-server-protos": "workspace:*",
     "long": "^5.2.3",
     "nice-grpc": "^2.1.7",
     "nice-grpc-common": "^2.0.2",
