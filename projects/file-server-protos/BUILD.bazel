@@ -6,6 +6,10 @@ load("@npm//:defs.bzl", "npm_link_all_packages")
 load("@aspect_rules_ts//ts:defs.bzl", "ts_project")
 load("@aspect_rules_js//npm:defs.bzl", "npm_package")
 
+# TODO ETHAN STOPPED HERE!
+# fix fix ifx import incorrec
+load("//rules:copy_to_workspace.bzl", "copy_to_workspace")
+
 npm_link_all_packages()
 
 file_name = "file.proto"
@@ -29,13 +33,13 @@ grpc_tools_bin.grpc_tools_node_protoc(
     name = gen_target,
     srcs = SRCS + BUILD_DEPS,
     # out_dirs = ["ts_protos_foo"],
-    outs = ["file.ts"],
+    outs = [base_name + ".ts"],
     args = [
-        "--plugin=protoc-gen-ts_proto=../../node_modules/.bin/protoc-gen-ts_proto",
+        "--plugin=protoc-gen-ts_proto=../../node_modules/.bin/protoc-gen-ts_proto",  # todo, can there be a better way to specify the root node_modules/.bin?
         "--ts_proto_out=./",
         "--ts_proto_opt=outputServices=nice-grpc,outputServices=generic-definitions,useExactTypes=true,outputPartialMethods=false,oneof=unions",
         "--proto_path=./",
-        "./file.proto",
+        "./" + file_name,
     ],
     chdir = package_name(),
     visibility = ["//visibility:public"],
@@ -57,56 +61,34 @@ _GENERATED = {
     # ...
 }
 
-# copy
-write_file(
-    name = "gen_update",
-    out = "update.sh",
-    content = [
-        # This depends on bash, would need tweaks for Windows
-        "#!/usr/bin/env bash",
-        # Bazel gives us a way to access the source folder!
-        "cd $BUILD_WORKSPACE_DIRECTORY",
-        "echo $BUILD_WORKSPACE_DIRECTORY",
-    ] + [
-        # Paths are now relative to the workspace.
-        # We can copy files from bazel-bin to the sources
-        "cp -fv bazel-bin/{0} {1}".format(
-            # Convert label to path
-            k.replace(":", "/"),
-            v,
-        )
-        for [
-            k,
-            v,
-        ] in _GENERATED.items()
-    ],
+copy_to_workspace(
+    name = "generate",
+    map = _GENERATED,
 )
 
-# This is what you can `bazel run` and it can write to the source folder
-sh_binary(
-    name = "update",
-    srcs = ["update.sh"],
-    data = _GENERATED.keys(),
-)
+# compiling and npm package
+
+ts_proj_name = base_name + "_server_protos_proj"
 
 ts_project(
-    name = "file_server_protos_proj",
+    name = ts_proj_name,
     srcs = [
-        "file.ts",
+        base_name + ".ts",
         "index.ts",
     ],
     declaration = True,
-    source_map = True,
     tsconfig = "//:tsconfig",
     # transpiler = swc,
     deps = BUILD_DEPS,  #TODO prune to only necessary runtime deps
 )
 
+npm_package_name = base_name + "-server-protos"
+
 npm_package(
-    name = "file-server-protos",
+    name = npm_package_name,
     srcs = [
         "package.json",
-        ":file_server_protos_proj",
+        ":" + ts_proj_name,
     ],
     visibility = ["//visibility:public"],
 )

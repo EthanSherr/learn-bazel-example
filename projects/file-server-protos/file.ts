@@ -16,7 +16,7 @@ export interface AddResult {
 
 export interface FileRequest {
   name: string;
-  last: string;
+  last?: string | undefined;
 }
 
 export interface FileResponse {
@@ -146,7 +146,7 @@ export const AddResult = {
 };
 
 function createBaseFileRequest(): FileRequest {
-  return { name: "", last: "" };
+  return { name: "", last: undefined };
 }
 
 export const FileRequest = {
@@ -154,7 +154,7 @@ export const FileRequest = {
     if (message.name !== "") {
       writer.uint32(10).string(message.name);
     }
-    if (message.last !== "") {
+    if (message.last !== undefined) {
       writer.uint32(18).string(message.last);
     }
     return writer;
@@ -193,7 +193,7 @@ export const FileRequest = {
   fromJSON(object: any): FileRequest {
     return {
       name: isSet(object.name) ? globalThis.String(object.name) : "",
-      last: isSet(object.last) ? globalThis.String(object.last) : "",
+      last: isSet(object.last) ? globalThis.String(object.last) : undefined,
     };
   },
 
@@ -202,7 +202,7 @@ export const FileRequest = {
     if (message.name !== "") {
       obj.name = message.name;
     }
-    if (message.last !== "") {
+    if (message.last !== undefined) {
       obj.last = message.last;
     }
     return obj;
@@ -417,25 +417,15 @@ export const FileServiceDefinition = {
       responseStream: true,
       options: {},
     },
-    add: {
-      name: "Add",
-      requestType: AddRequest,
-      requestStream: false,
-      responseType: AddResult,
-      responseStream: false,
-      options: {},
-    },
   },
 } as const;
 
 export interface FileServiceImplementation<CallContextExt = {}> {
   getFile(request: FileRequest, context: CallContext & CallContextExt): ServerStreamingMethodResult<FileResponse>;
-  add(request: AddRequest, context: CallContext & CallContextExt): Promise<AddResult>;
 }
 
 export interface FileServiceClient<CallOptionsExt = {}> {
   getFile(request: FileRequest, options?: CallOptions & CallOptionsExt): AsyncIterable<FileResponse>;
-  add(request: AddRequest, options?: CallOptions & CallOptionsExt): Promise<AddResult>;
 }
 
 function bytesFromBase64(b64: string): Uint8Array {

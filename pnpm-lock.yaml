@@ -14,6 +14,9 @@ importers:
       '@esherr/file-server-protos':
         specifier: workspace:*
         version: link:projects/file-server-protos
+      cli-progress:
+        specifier: 3.12.0
+        version: 3.12.0
       long:
         specifier: ^5.2.3
         version: 5.2.3
@@ -27,6 +30,9 @@ importers:
         specifier: ^7.2.5
         version: 7.2.5
     devDependencies:
+      '@types/cli-progress':
+        specifier: 3.11.5
+        version: 3.11.5
       grpc-tools:
         specifier: ^1.12.4
         version: 1.12.4
@@ -3085,6 +3091,12 @@ packages:
       '@types/node': 20.9.5
     dev: false
 
+  /@types/cli-progress@3.11.5:
+    resolution: {integrity: sha512-D4PbNRbviKyppS5ivBGyFO29POlySLmA2HyUFE4p5QGazAMM3CwkKWcvTl8gvElSuxRh6FPKL8XmidX873ou4g==}
+    dependencies:
+      '@types/node': 20.9.5
+    dev: true
+
   /@types/connect-history-api-fallback@1.5.4:
     resolution: {integrity: sha512-n6Cr2xS1h4uAulPRdlw6Jl6s1oG8KrVilPN2yUITEs+K48EzMJJ3W1xy8K5eWuFvjp3R74AOIGSmp2UfBJ8HFw==}
     dependencies:
@@ -4620,6 +4632,13 @@ packages:
     engines: {node: '>= 10.0'}
     dependencies:
       source-map: 0.6.1
+    dev: false
+
+  /cli-progress@3.12.0:
+    resolution: {integrity: sha512-tRkV3HJ1ASwm19THiiLIXLO7Im7wlTuKnvkYaTkyoAPefqjNg7W7DHKUlGRxy9vxDvbyCYQkQozvptuMkGCg8A==}
+    engines: {node: '>=4'}
+    dependencies:
+      string-width: 4.2.3
     dev: false
 
   /cliui@7.0.4:

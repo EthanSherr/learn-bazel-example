@@ -17,6 +17,11 @@ ts_config(
 
 npm_link_all_packages()
 
+NODE_MODULES = ["//:node_modules/" + d for d in [
+    "@esherr/file-server-protos",
+    "nice-grpc",
+]]
+
 ts_project(
     name = "app-project",
     srcs = [
@@ -26,33 +31,31 @@ ts_project(
     source_map = True,
     tsconfig = ":config",
     # transpiler = swc,
-    deps = [],
+    deps = NODE_MODULES,
 )
 
 js_binary(
     name = "app",
-    # Reference the location where the acorn npm module was linked in the root Bazel package
-    data = [":app-project"],
+    data = [":app-project", "server-files/sample.mp4"],
     entry_point = "index.js",
 )
 
+# grpc client example
 ts_project(
-    name = "idk",
+    name = "client-project",
     srcs = [
-        "idk.ts",
+        "client.ts",
     ],
     declaration = True,
     source_map = True,
     tsconfig = ":config",
     # transpiler = swc,
-    deps = [
-        "//:node_modules/@esherr/file-server-protos",
-    ],
+    deps = NODE_MODULES + ["//:node_modules/cli-progress"],
 )
 
 js_binary(
-    name = "idk-binary",
+    name = "client",
     # Reference the location where the acorn npm module was linked in the root Bazel package
-    data = [":idk"],
-    entry_point = "idk.js",
+    data = [":client-project"],
+    entry_point = "client.js",
 )

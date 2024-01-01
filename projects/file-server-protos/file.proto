@@ -4,7 +4,6 @@ package filestream;
 
 service FileService {
   rpc GetFile (FileRequest) returns (stream FileResponse);
-  rpc Add (AddRequest) returns (AddResult);
 }
 
 message AddRequest {
@@ -18,7 +17,7 @@ message AddResult {
 
 message FileRequest {
   string name = 1;
-  string last = 2;
+  optional string last = 2;
 }
 
 message FileResponse {
